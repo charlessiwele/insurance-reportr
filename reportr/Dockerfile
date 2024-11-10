@@ -16,6 +16,9 @@ RUN python manage.py makemigrations
 # Run any  required migrations
 RUN python manage.py migrate
 
+# Generate default admin user (admin|admin)
+RUN python manage.py generatedefaultsuperuser
+
 # Expose the port the app runs on
 EXPOSE 8000
 

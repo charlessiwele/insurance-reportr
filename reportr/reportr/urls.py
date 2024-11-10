@@ -6,7 +6,7 @@ from data_center.views import SyncDocumentPaymentsView, SyncDocumentAgentsView, 
 from reportr import settings
 
 urlpatterns = [
-    path('/', admin.site.urls),
+    path('', admin.site.urls),
     path('mail/sync_document_payments/<document_id>', SyncDocumentPaymentsView.as_view(),
          name='sync_document_payments'),
     path('mail/sync_document_agents/<document_id>', SyncDocumentAgentsView.as_view(),

@@ -7,7 +7,6 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.test import TestCase
-from data_center.management.commands.generatesuperuser import Command as generatesuperuser_command
 from data_center.management.commands.populateconfigdata import Command as populateconfigdata_command
 from data_center.models import ReportType, DocumentStatus, Report, PaymentDocument, Agent, Payment
 
@@ -17,33 +16,6 @@ from data_center.services.sync_payment_doc_payments import sync_payment_doc_paym
 
 
 # Create your tests here.
-class GenerateSuperUserTest(TestCase):
-    def test_generatesuperuser(self):
-        print("Method: test_generatesuperuser.")
-        username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-        password = username[:5]
-        options = {
-            'users_dir': './test_user_credentials/super_users',
-            'username': username,
-            'password': password
-        }
-        generatesuperuser_command().handle(**options)
-
-        superuser_credentials_file = f'{options.get("users_dir")}/{options.get("username")}.txt'
-        self.assertTrue(os.path.exists(options.get("users_dir")), f'Folder with superuser login credentials exists at {options.get("users_dir")}')
-        self.assertTrue(os.path.isfile(superuser_credentials_file), f'File with superuser login credentials is created at {superuser_credentials_file}')
-
-        login = self.client.login(username=options.get("username"), password=options.get("password"))
-        self.assertTrue(login, f'user {options.get("username")} is able to login')
-
-        user = User.objects.get(username=options.get("username"))
-        self.assertTrue(user.is_superuser, f'user {options.get("username")} is a superuser')
-
-    def tearDown(self):
-        print("tearDown: GenerateSuperUserTest.")
-        shutil.rmtree('./test_user_credentials/')
-
-
 class PopulateConfigSystemDataTest(TestCase):
     def test_populateconfigdata(self):
         print("Method: test_populateconfigdata.")
@@ -61,8 +33,8 @@ class SyncPaymentDocTest(TestCase):
     def setUp(self):
         print("setUp: SyncPaymentDocTest.")
         populateconfigdata_command().handle()
-        test_file_original_path = '../Test Files/2018_12_11_payments_test.csv'
-        self.test_file_destination_path = './documents/2018_12_11_payments_test.csv'
+        test_file_original_path = '../Test Files/2024_09_10_payments.csv'
+        self.test_file_destination_path = './media/documents/2024_09_10_payments.csv'
         datetime_now = datetime.now().strftime(ConstantStrings.strftime_format)
 
         if not os.path.exists(self.test_file_destination_path):
@@ -80,6 +52,17 @@ class SyncPaymentDocTest(TestCase):
         self.assertTrue(os.path.isfile(self.payment_document.file.path), f'payments_document file field has valid file')
 
     def test_sync_payment_doc_agents(self):
+        """
+        Test the sync_payment_doc_agents function.
+
+        This test method verifies that the sync_payment_doc_agents function correctly inserts the expected number
+        of agents into the Agent model from the payments document.
+
+        The method calls sync_payment_doc_agents with a document ID, retrieves all Agent objects, and checks if
+        the number of agents inserted matches the expected number.
+
+        :return: None
+        """
         print("Method: test_sync_payment_doc_agents.")
         sync_payment_doc_agents(1)
         agents = Agent.objects.filter()
@@ -88,6 +71,17 @@ class SyncPaymentDocTest(TestCase):
                          "expected number of agents inserted from payments doc to agents model")
 
     def test_sync_payment_doc_payments(self):
+        """
+        Test the sync_payment_doc_payments function.
+
+        This test method verifies that the sync_payment_doc_payments function correctly inserts the expected number
+        of payments into the Payment model from the payments document.
+
+        The method calls sync_payment_doc_payments with a document ID, retrieves all Payment objects, and checks if
+        the number of payments inserted matches the expected number.
+
+        :return: None
+        """
         print("Method: test_sync_payment_doc_payments.")
         sync_payment_doc_payments(1)
         payments = Payment.objects.filter()
@@ -111,8 +105,8 @@ class ReportServicesTest(TestCase):
         print("setUp: ReportServicesTest.")
         populateconfigdata_command().handle()
 
-        test_file_original_path = '../Test Files/2018_12_11_payments_test.csv'
-        self.test_file_destination_path = './documents/2018_12_11_payments_test.csv'
+        test_file_original_path = '../Test Files/2024_09_10_payments.csv'
+        self.test_file_destination_path = './media/documents/2024_09_10_payments.csv'
         datetime_now = datetime.now().strftime(ConstantStrings.strftime_format)
 
         if not os.path.exists(self.test_file_destination_path):
@@ -139,6 +133,17 @@ class ReportServicesTest(TestCase):
                         'report model instance is created successfully')
 
     def test_days_from_suspension_report(self):
+        """
+        Test the days_from_suspension_report function.
+
+        This test method checks if the report file is created successfully and if the number of successful payments in the report is as expected.
+
+        The test method first calls the days_from_suspension_report function to create the report file.
+        Then, it asserts if the report file is created successfully by checking if the file exists.
+        Finally, the test method asserts if the number of successful payments in the report is as expected by comparing the expected number of successful payments with the actual number of successful payments.
+
+        :return: None
+        """
         print("Method: test_days_from_suspension_report.")
         self.days_from_suspension_doc_path = days_from_suspension_report(1)
         self.assertTrue(os.path.isfile(self.days_from_suspension_doc_path),

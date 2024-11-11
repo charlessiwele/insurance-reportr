@@ -14,13 +14,13 @@
 5.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py makemigrations </code> to generate necessary migrations 
 6.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py migrate </code> to generate necessary tables/models from above-generated migrations 
 7.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py populateconfigdata </code> to run the management command that will generate default statuses and types required for the project to function correctly 
-8.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py generatedefaultsuperuser </code> to generate a default user (admin) and password (admin)  
+8.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py generatedefaultsuperuser </code> to generate a default user (admin) and password (admin)
 9.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py collectstatic </code> to copy static files to the static folder
 10. From the "reportr" project folder (where manage.py file is located), run <code> python manage.py runserver </code> to start the test/local server
 
 # GENERAL USAGE INSTRUCTIONS
 1. After the setup instructions above, confirm that you have the server up running. To do this, open your browser and navigate to http://127.0.0.1:8000. You should be presented with the login
-2. You can log in using the user and password generated in "generatesuperuser"
+2. You can log in using the user (admin) and password (admin) generated in "generatedefaultsuperuser"
 3. Once logged in, navigate to PaymentDocument model
 4. Add new model instance/record and attach the test file to the file field
 5. Select option to "Save and continue editing"

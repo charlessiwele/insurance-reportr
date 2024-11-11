@@ -41,3 +41,6 @@
 - Refresh current "Report" page
 - Reports will be generated and listed below the standard Report fields.
 - Select the file link on any of the generated files to download and view the file contents
+
+# RUNNING UNIT TESTS
+1.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py test </code> to run the unit tests 

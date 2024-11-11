@@ -1,9 +1,22 @@
-# SETUP
-✅ Navigate to "reportr" project folder (where Dockerfile is located)
-✅ From the "reportr" project folder, run the following:
-<code>
-docker build -t reportr-app . && docker run --name insurance-app-1 -p 8000:8000 reportr-app
-</code>
+# Application Deployment Option 1 (With Docker)
+1.  Navigate to "reportr" project folder (where Dockerfile is located)
+2.  From the "reportr" project folder, run the following:
+- if it is the first time youre building and running this project you can run the following command
+<code>docker build -t reportr-app . && docker run --name insurance-app-1 -p 8000:8000 reportr-app</code>
+- if you have already/previously built and run the poject then you cann remove the current deployment instance a nd re-build and run following command:
+<code>docker build -t reportr-app . &&  docker rm insurance-app-1 && docker run --name insurance-app-1 -p 8000:8000 reportr-app</code>
+
+# Application Deployment Option 2 (Without Docker)
+1.  Install python on the machine you will be running the project on
+2.  Navigate to "reportr" project folder (where Dockerfile is located)
+3.  Generate and activate virtual env 
+4.  With virtual env activated, run <code> pip install requirements" </code>
+5.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py makemigrations </code> to generate necessary migrations 
+6.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py migrate </code> to generate necessary tables/models from above-generated migrations 
+7.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py populateconfigdata </code> to run the management command that will generate default statuses and types required for the project to function correctly 
+8.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py generatedefaultsuperuser </code> to generate a default user (admin) and password (admin)  
+9.  From the "reportr" project folder (where manage.py file is located), run <code> python manage.py collectstatic </code> to copy static files to the static folder
+10. From the "reportr" project folder (where manage.py file is located), run <code> python manage.py runserver </code> to start the test/local server
 
 # GENERAL USAGE INSTRUCTIONS
 1. After the setup instructions above, confirm that you have the server up running. To do this, open your browser and navigate to http://127.0.0.1:8000. You should be presented with the login
